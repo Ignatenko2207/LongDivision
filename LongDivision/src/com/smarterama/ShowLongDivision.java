@@ -1,5 +1,3 @@
-
-
 package com.smarterama;
 
 public class ShowLongDivision {
@@ -8,28 +6,30 @@ public class ShowLongDivision {
 		
 		int dividend = 12345;
 		int divider = 7;
-		showDivision(dividend, divider);
+		String outputString = longDivisionAsString(dividend, divider);
+		System.out.println(outputString);
 	}
 
-	public static void showDivision(int dividend, int divider) {
+	public static String longDivisionAsString(int dividend, int divider) {
+		String outputString = "";
 		if (divider == 0) {
-			System.out.print("Divider cannot be \"0\"!");
-			return;
+			outputString = "Divider cannot be \"0\"!";
+			return outputString;
 		}
 		if (divider < 0 || dividend < 0) {
-			System.out.print("Dividend or divider less \"0\"!  Input other numbers!");
-			return;
+			outputString = "Dividend or divider less \"0\"!  Input other numbers!";
+			return outputString;
 		}
 		if (divider > Integer.MAX_VALUE || dividend > Integer.MAX_VALUE) {
-			System.out.print("Dividend or divider cannot be larger than 2 147 483 647.  Input other numbers!");
-			return;
+			outputString = "Dividend or divider cannot be larger than 2 147 483 647.  Input other numbers!";
+			return outputString;
 		}
 		if (divider > dividend) {
-			System.out.print("Divider is larger than dividend. Input other numbers!");
-			return;
+			outputString = "Divider is larger than dividend. Input other numbers!";
+			return outputString;
 		}
 		int finalResult = getDivisionResult(dividend, divider);
-		System.out.println(dividend + "|" + divider);
+		outputString += dividend + "|" + divider + "\n";
 		char [] numbersOfDividend = Integer.toString(dividend).toCharArray();
 		char [] numbersOfFinalRes = Integer.toString(finalResult).toCharArray();
 		String partOfDividendAsString = "";
@@ -41,7 +41,7 @@ public class ShowLongDivision {
 		boolean firstRow = true;
 		boolean secondRow = false;
 		for (int i = 0; i < numbersOfDividend.length; i++) {
-			quantityOfCycles += 1;
+			quantityOfCycles++;
 			partOfDividendAsString = partOfDividendAsString + Integer.toString(Character.getNumericValue(numbersOfDividend[i]));
 			tempDividend = Integer.parseInt(partOfDividendAsString);
 			if(tempDividend<divider){
@@ -53,7 +53,8 @@ public class ShowLongDivision {
 			spacesBefore = numbersOfDividend.length - spacesAfter - symbolsInRes.length;
 			//it shows correct picture in first row after "dividend|divider"
 			if(firstRow){
-				System.out.print(setSpaceInString(spacesBefore) + tempResult + setSpaceInString(spacesAfter));
+				
+				outputString += setSpaceInString(spacesBefore) + tempResult + setSpaceInString(spacesAfter);
 				String minuses = "";
 				int minusesLength;
 				char [] symbolsInDvivder = Integer.toString(divider).toCharArray();
@@ -66,8 +67,8 @@ public class ShowLongDivision {
 				for (int j = 0; j < minusesLength; j++){
 					minuses += "-";
 				}
-				System.out.println("+" + minuses);
-				System.out.println(setSpaceInString(spacesBefore) + setUnderlineInString(symbolsInRes.length) + setSpaceInString(spacesAfter) + "|" + finalResult);
+				outputString += "+" + minuses + "\n";
+				outputString += setSpaceInString(spacesBefore) + setUnderlineInString(symbolsInRes.length) + setSpaceInString(spacesAfter) + "|" + finalResult + "\n";
 				secondRow = true;
 			}
 			// it skips existing first row
@@ -81,9 +82,9 @@ public class ShowLongDivision {
 				continue;
 			}
 				
-			System.out.println(setSpaceInString(spacesBefore) + partOfDividendAsString);
-			System.out.println(setSpaceInString(spacesBefore) + tempResult);
-			System.out.println(setSpaceInString(spacesBefore) + setUnderlineInString(symbolsInRes.length));
+			outputString += setSpaceInString(spacesBefore) + partOfDividendAsString + "\n";
+			outputString += setSpaceInString(spacesBefore) + tempResult + "\n";
+			outputString += setSpaceInString(spacesBefore) + setUnderlineInString(symbolsInRes.length) + "\n";
 			
 			partOfDividendAsString = String.valueOf(getRemainOfDivision(tempDividend, divider));
 			// it remooves "0" in the begining of strings if remain of division equals 0.
@@ -95,26 +96,29 @@ public class ShowLongDivision {
 			if(i == (numbersOfDividend.length-1)){
 				char [] numbersOfRemainOfDivision = Integer.toString(getRemainOfDivision(dividend, divider)).toCharArray();	
 				spacesBefore = numbersOfDividend.length - numbersOfRemainOfDivision.length;
-				System.out.println(setSpaceInString(spacesBefore) + getRemainOfDivision(dividend, divider));
+				outputString += setSpaceInString(spacesBefore) + getRemainOfDivision(dividend, divider) + "\n";
 			}
 		}
 		//it shows correct picture if there is only one cycle
-		if(quantityOfCycles == 1){
-			System.out.print(getRemainOfDivision(dividend, divider));
+		if(quantityOfCycles == 2){
+			char [] numbersOfRemainOfDivision = Integer.toString(getRemainOfDivision(dividend, divider)).toCharArray();
+			spacesBefore = numbersOfDividend.length - numbersOfRemainOfDivision.length;
+			outputString += setSpaceInString(spacesBefore) + getRemainOfDivision(dividend, divider);
 		}
+		return outputString;
 	}
 
-	private static int getDivisionResult(int dividend, int divider) {
+	public static int getDivisionResult(int dividend, int divider) {
 		int result = (Integer)dividend/divider;
 		return result;
 	}
 	
-	private static int getRemainOfDivision(int dividend, int divider) {
+	public static int getRemainOfDivision(int dividend, int divider) {
 		int result = (Integer)dividend%divider;
 		return result;
 	}
 
-	private static String setSpaceInString(int quantityOfSpaces) {
+	public static String setSpaceInString(int quantityOfSpaces) {
 		String spaces = "";
 		for (int i = 0; i < quantityOfSpaces; i++){
 			spaces += " ";
@@ -125,7 +129,7 @@ public class ShowLongDivision {
 	// as I remember, my teacher in school said, that underline shouldn't be larger, than quantity of numbers upper it.
 	// so I made such method to output different underlines, think, it looks better
 	
-	private static String setUnderlineInString(int quantityOfUnderlines) {
+	public static String setUnderlineInString(int quantityOfUnderlines) {
 		String underline = "";
 		for (int k = 0; k < quantityOfUnderlines; k++){
 			underline += "_";
@@ -133,4 +137,3 @@ public class ShowLongDivision {
 		return underline;
 	}
 }
-
